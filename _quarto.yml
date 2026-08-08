@@ -1,0 +1,49 @@
+project:
+  type: website
+  output-dir: docs
+
+brand: _brand.yml
+
+website:
+  title: "Shubham Dutta"
+  search: 
+    location: navbar
+    type: overlay
+  navbar:
+    left: 
+      - href: index.qmd
+        text: Home
+      # - href: projects.qmd
+      #   text: Projects
+      - href: blogs.qmd
+        text: Blogs
+      # - href: experience.qmd
+      #   text: Experience
+      # - href: skills.qmd
+      #   text: Skills
+      - href: publications.qmd
+        text: Publications
+    right:
+      - icon: envelope
+        href: mailto:shubhamdutta26@gmail.com
+      # - text: "{{< ai cv >}}"
+      #   href: docs/2022-09-06_CV_ShubhamDutta.pdf
+      - text: "{{< ai google-scholar >}}"
+        href: https://scholar.google.com/citations?user=okp_AlgAAAAJ&hl=en
+      - icon: linkedin
+        href: https://www.linkedin.com/in/shubhamdutta26/
+      - text: "{{< ai orcid >}}"
+        href: https://orcid.org/0000-0001-8484-0717
+      - icon: github
+        href: https://github.com/shubhamdutta26
+      # - text: "{{< ai stackoverflow >}}"
+      #   href: https://stackoverflow.com/users/17288160/shubham
+
+format:
+  html:
+    theme: 
+      light: custom.scss
+    css: styles.css
+
+editor: visual
+

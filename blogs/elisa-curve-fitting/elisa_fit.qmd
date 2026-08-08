@@ -1,0 +1,160 @@
+---
+title: "ELISA curve fitting using ggplot2"
+author: "Shubham Dutta"
+date: "2026-06-08"
+execute:
+  message: false
+  warning: false
+categories: [ggplot2, drc, ELISA]
+---
+
+## Introduction
+
+Here is an example of how to fit and analyse ELISA data using `ggplot2` and `drc`.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyplate)
+library(drc)
+library(ggtext)
+```
+
+First we import plate data using the `tidy_plate` function from the `tidyplate` package:
+
+```{r}
+# Converts microwell shaped data to tidy data
+raw_data <- tidy_plate("data/elisa_example.xlsx")
+glimpse(raw_data)
+```
+
+## Prepare data before plotting
+
+```{r}
+# Extracting blank values and calculating their mean
+blank_data <- raw_data |>
+    dplyr::filter(primary_mab_name == "blank")
+mean_blank <- mean(blank_data[["od450"]], na.rm = TRUE)
+
+# Blanking OD values and summarizing their mean and standard deviation
+summary <- raw_data |>
+    dplyr::filter(primary_mab_name != "blank") |>
+    mutate(blanked_od = od450 - mean_blank) |>
+    group_by(primary_mab_name, primary_mab_conc) |>
+    summarise(
+      mean_od = mean(blanked_od, na.rm = TRUE),
+      sd_od = sd(blanked_od, na.rm = TRUE),
+      .groups = 'drop'
+    )
+head(summary)
+```
+
+## Compute EC~50~ for each antibody
+
+```{r}
+# Helper function to fit 4PL and extract EC50 + CI
+fit_one_ab <- function(df) {
+  fit <- drm(
+    mean_od ~ primary_mab_conc,
+    data = df,
+    fct  = LL.4()
+  )
+
+  ed <- ED(fit, 50, interval = "delta")
+  pars <- coef(fit)
+  bottom <- pars["c:(Intercept)"]
+  top    <- pars["d:(Intercept)"]
+
+  y_ec50 <- bottom + (top - bottom) / 2
+
+  tibble(
+    antibody = df$antibody[1],
+    ec50     = ed[1, "Estimate"],
+    ec50_se  = ed[1, "Std. Error"],
+    ec50_low = ed[1, "Lower"],
+    ec50_up  = ed[1, "Upper"]
+  )
+}
+
+ec50_df <- summary |>
+  group_by(primary_mab_name) |>
+  group_modify(~ fit_one_ab(.x)) |>
+  ungroup()
+
+print(ec50_df)
+```
+
+## The final plot
+
+I am making this plot a bit fancy.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+colors <- c("aBACE" = "#00a5a6", "aSARS" = "#e03d90")
+light_colors <- prismatic::clr_lighten(colors, 0.7)
+
+ec50_label <- ec50_df |>
+  mutate(
+    label = paste0(
+      primary_mab_name, ": EC~50~ = ", signif(ec50, 3)
+    ),
+    x = 0.015,
+    y = c(1.3, 1.2)
+  )
+
+theme_set(theme_bw(base_size = 20))
+ggplot(
+  summary,
+  aes(
+    x = primary_mab_conc,
+    y = mean_od,
+    group = primary_mab_name,
+    color = primary_mab_name,
+    shape = primary_mab_name,
+    fill = primary_mab_name
+  )
+) +
+  geom_smooth(
+    method = drc::drm,
+    method.args = list(fct = drc::L.4()),
+    se = FALSE,
+    linewidth = 1,
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    aes(ymin = mean_od - sd_od, ymax = mean_od + sd_od),
+    width = 0.1,
+    show.legend = FALSE
+  ) +
+  geom_point(size = 3, stroke = 1.5) +
+  geom_textbox(
+    data = ec50_label,
+    aes(x, y, label = label),
+    size = 6,
+    face = "bold",
+    width = 0.35,
+    box.color = NA,
+    fill = NA
+  ) +
+  scale_x_log10(labels = scales::label_log()) +
+  scale_y_continuous(
+    limits = c(0, 1.5), 
+    n.breaks = 7, 
+    expand = expansion(0)
+  ) +
+  scale_color_manual(name = NULL, values = colors) +
+  scale_fill_manual(name = NULL, values = light_colors) +
+  scale_shape_manual(name = NULL, values = c(21, 22)) +
+  labs(
+    x = "Antibody (\U03BCg/mL), Log",
+    y = "OD~450~ (Mean \U00B1 SE)",
+    title = "<span style='color:#00a5a6'>anti-BACE</span> is more potent compared to<span style='color:#e03d90'> anti-SARS</span> antibody"
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_markdown(size = 20),
+    axis.title.y = element_markdown(),
+    panel.grid = element_blank()
+  )
+```

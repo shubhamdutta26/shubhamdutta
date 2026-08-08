@@ -1,0 +1,101 @@
+---
+title: "Plot dissociation kinetics in ggplot2"
+author: "Shubham Dutta"
+date: "2023-12-04"
+execute:
+  message: false
+  warning: false
+categories: [biacore, SPR, cytiva, ggplot2, tidyverse]
+# image: "image.jpeg"
+---
+
+## Introduction
+
+During the past weeks I was running a lot of antibody kinetics experiments on the Biacore T200 instrument. Unfortunately, the Biacore evaluation software is an older version and cannot be used to make publication quality plots. As a result, I thought of using ggplot2 to plot biacore kinetics [data](biacore_kinteics.txt). Lets jump right in.
+
+## Preparing the data
+
+Load required libraries:
+
+```{r}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+Import the [data](biacore_kinteics.txt) into R Studio:
+
+```{r}
+raw_data <- read_delim(
+  "biacore_kinetics.txt", 
+  escape_double = FALSE, 
+  trim_ws = TRUE
+)
+```
+
+Preparing the data for plotting:
+
+```{r}
+# The first column (1) is time in seconds
+# The RU (response units) are stored in variables ending with _Y.
+data_final <- raw_data |> select(c(1, ends_with("Y")))
+
+# Column renaming (time, F = fitted values, R = raw values)
+names(data_final) <- c("time", "2 nM-R", "2 nM-F", "4 nM-R", "4 nM-F", "8 nM-R", 
+                       "8 nM-F", "16 nM-R", "16 nM-F", "32 nM-R", "32 nM-F", 
+                       "8 nM (rep 2)-R", "8 nM (rep 2)-F")
+
+# Transformation of raw data to tidy data
+# Separating the concentrations from raw or fitted data
+# Filtering out the duplicate 8nM samples
+plot_data <- data_final |> 
+  pivot_longer(!time, names_to = "sample", values_to = "values") |>
+  separate(col=sample, into=c("conc", "type"), sep='-') |> 
+  filter(conc != "8nM (rep 2)")
+
+# Seperating raw and fitted RU
+raw <- plot_data |> filter(type == "R")
+fitted <- plot_data |> filter(type == "F")
+```
+
+## The final plot
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+ggplot(NULL) +
+  geom_line(
+    data = raw,
+    aes(x = time, y = values, group = conc)
+  ) +
+  geom_line(
+    data = fitted,
+    aes(x = time, y = values, group = conc),
+    color = "red"
+  ) +
+  scale_x_continuous(
+    expand = c(0, 0), 
+    limits = c(NA, 600),
+    n.breaks = 14, 
+    labels = scales::label_number(suffix = "s")
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-2, 15)
+  ) +
+  theme_linedraw(base_size = 20) +
+  labs(
+    caption = "Note: Red line is fitted data",
+    color = "Soluble CD16",
+    x = "Time (seconds)",
+    y = "Response units (RU)"
+  ) +
+  theme(
+    legend.position = "none",
+    axis.title.x  = element_text(size = 13, face = "bold"),
+    axis.title.y  = element_text(size = 13, face = "bold"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+```

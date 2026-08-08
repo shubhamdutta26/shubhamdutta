@@ -1,0 +1,12 @@
+typography:
+  fonts:
+    - family: Google Sans
+      source: google
+    - family: Fira Mono
+      source: google
+
+  base: Google Sans
+  headings:
+    family: Google Sans
+    weight: 400
+  monospace: Fira Mono

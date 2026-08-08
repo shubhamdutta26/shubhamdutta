@@ -1,0 +1,345 @@
+[
+  {
+    "objectID": "skills.html",
+    "href": "skills.html",
+    "title": "Skills",
+    "section": "",
+    "text": "Molecular Biology\nCRISPR-Cas9 knock-outs and knock-in, Genome wide RNAi and CRISPR screens, PCR, SDS PAGE, Recombinant DNA Technology, Molecular Cloning, Proficient in SnapGene, Mutagenesis, Western Blots, Quantitative RT-PCR, Flow Cytometry (upto 8 color sorting and Flow panel design), Gene tagging, ChIP-Seq, RNA-Seq, Preparation of NGS libraries, Fluorescence Microscopy\n\n\nProtein Biology\nAntibody engineering, Yeast VHH hybrid screen, Antibody production using transient and Fed-Batch culture, Purification using AKTA, ELISA, Surface Plasmon resonance (SPR) using Biacore, BiLayer Interferometry (BLI) using OCTET, In vitro Protein purification and kinase assays, Immunoprecipitation, Phospho-protein separation by phostag gels\n\n\nCell culture\nStable cell line generation (CHO, HEK, MCF10A, etc.), High-throughput clone selection (AMBR15, Clonepix, Duetz system), Handling and culture of Blood and PBMCs, Generation of neurons from NPCs and iPSCs, Viral packaging and transduction, Soft agar colony formation, invasion and migration assays, Mammalian Cell culture, maintenance, Transfection and related techniques\n\n\nData Science\nElectronic notebook keeping using Evernote and R Markdown, RNA-Seq and CHIP-Seq data analysis, Genomic data mining, R programming (Base, Tidyverse, Shiny, Bioconductor), Data wrangling, analysis and visualization, Basic statistics using R, Data driven websites (using R Shiny and Markdown), Basic knowledge in Python programming\n\n\nScientific Editing/ Writing\nScientific papers and research proposals for grants, Editorial Board member of several peer-reviewed journals"
+  },
+  {
+    "objectID": "blogs.html",
+    "href": "blogs.html",
+    "title": "Shubham Dutta",
+    "section": "",
+    "text": "Splines in ggplot2\n\n\n\n\n\n\n\n\nAug 8, 2026\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nFormating axes and labels in ggplot2\n\n\n\n\n\n\n\n\nJul 28, 2026\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nELISA curve fitting using ggplot2\n\n\n\n\n\n\n\n\nJun 8, 2026\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nPlot dissociation kinetics in ggplot2\n\n\n\n\n\n\n\n\nDec 4, 2023\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nSetting up Pymol for visualizations\n\n\n\n\n\n\n\n\nMar 19, 2023\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nInstalling tidyverse in Ubuntu 22.04.3 LTS\n\n\n\n\n\n\n\n\nMar 19, 2023\n\n\nShubham Dutta\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "blogs/ubuntu-tidyverse/ubuntu.html",
+    "href": "blogs/ubuntu-tidyverse/ubuntu.html",
+    "title": "Installing tidyverse in Ubuntu 22.04.3 LTS",
+    "section": "",
+    "text": "Installing the Tidyverse package in Ubuntu can be challenging compared to Windows or Mac. This short tutorial will show how to install it in Ubuntu 22.04.3 LTS.\n\nUpdate Ubuntu from terminal\nsudo apt-get update\n\n\nInstall base R from terminal\nsudo apt install r-base\nsudo apt install r-base-dev\n\n\nInstall Ubuntu packages for R from terminal\nsudo apt-get install r-cran-curl r-cran-openssl r-cran-xml2\n\n\nInstall tidyverse from R/ RStudio\ninstall.packages(\"tidyverse\")"
+  },
+  {
+    "objectID": "blogs/biacore/biacore.html",
+    "href": "blogs/biacore/biacore.html",
+    "title": "Plot dissociation kinetics in ggplot2",
+    "section": "",
+    "text": "During the past weeks I was running a lot of antibody kinetics experiments on the Biacore T200 instrument. Unfortunately, the Biacore evaluation software is an older version and cannot be used to make publication quality plots. As a result, I thought of using ggplot2 to plot biacore kinetics data. Lets jump right in."
+  },
+  {
+    "objectID": "blogs/biacore/biacore.html#introduction",
+    "href": "blogs/biacore/biacore.html#introduction",
+    "title": "Plot dissociation kinetics in ggplot2",
+    "section": "",
+    "text": "During the past weeks I was running a lot of antibody kinetics experiments on the Biacore T200 instrument. Unfortunately, the Biacore evaluation software is an older version and cannot be used to make publication quality plots. As a result, I thought of using ggplot2 to plot biacore kinetics data. Lets jump right in."
+  },
+  {
+    "objectID": "blogs/biacore/biacore.html#preparing-the-data",
+    "href": "blogs/biacore/biacore.html#preparing-the-data",
+    "title": "Plot dissociation kinetics in ggplot2",
+    "section": "Preparing the data",
+    "text": "Preparing the data\nLoad required libraries:\n\nlibrary(readr)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(ggplot2)\n\nImport the data into R Studio:\n\nraw_data &lt;- read_delim(\n  \"biacore_kinetics.txt\", \n  escape_double = FALSE, \n  trim_ws = TRUE\n)\n\nPreparing the data for plotting:\n\n# The first column (1) is time in seconds\n# The RU (response units) are stored in variables ending with _Y.\ndata_final &lt;- raw_data |&gt; select(c(1, ends_with(\"Y\")))\n\n# Column renaming (time, F = fitted values, R = raw values)\nnames(data_final) &lt;- c(\"time\", \"2 nM-R\", \"2 nM-F\", \"4 nM-R\", \"4 nM-F\", \"8 nM-R\", \n                       \"8 nM-F\", \"16 nM-R\", \"16 nM-F\", \"32 nM-R\", \"32 nM-F\", \n                       \"8 nM (rep 2)-R\", \"8 nM (rep 2)-F\")\n\n# Transformation of raw data to tidy data\n# Separating the concentrations from raw or fitted data\n# Filtering out the duplicate 8nM samples\nplot_data &lt;- data_final |&gt; \n  pivot_longer(!time, names_to = \"sample\", values_to = \"values\") |&gt;\n  separate(col=sample, into=c(\"conc\", \"type\"), sep='-') |&gt; \n  filter(conc != \"8nM (rep 2)\")\n\n# Seperating raw and fitted RU\nraw &lt;- plot_data |&gt; filter(type == \"R\")\nfitted &lt;- plot_data |&gt; filter(type == \"F\")"
+  },
+  {
+    "objectID": "blogs/biacore/biacore.html#the-final-plot",
+    "href": "blogs/biacore/biacore.html#the-final-plot",
+    "title": "Plot dissociation kinetics in ggplot2",
+    "section": "The final plot",
+    "text": "The final plot\n\nggplot(NULL) +\n  geom_line(\n    data = raw,\n    aes(x = time, y = values, group = conc)\n  ) +\n  geom_line(\n    data = fitted,\n    aes(x = time, y = values, group = conc),\n    color = \"red\"\n  ) +\n  scale_x_continuous(\n    expand = c(0, 0), \n    limits = c(NA, 600),\n    n.breaks = 14, \n    labels = scales::label_number(suffix = \"s\")\n  ) +\n  scale_y_continuous(\n    expand = c(0, 0),\n    limits = c(-2, 15)\n  ) +\n  theme_linedraw(base_size = 20) +\n  labs(\n    caption = \"Note: Red line is fitted data\",\n    color = \"Soluble CD16\",\n    x = \"Time (seconds)\",\n    y = \"Response units (RU)\"\n  ) +\n  theme(\n    legend.position = \"none\",\n    axis.title.x  = element_text(size = 13, face = \"bold\"),\n    axis.title.y  = element_text(size = 13, face = \"bold\"),\n    panel.grid.major = element_blank(),\n    panel.grid.minor = element_blank()\n  )"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "",
+    "text": "Here are some examples of how to format axes and labels in ggplot2."
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "",
+    "text": "Here are some examples of how to format axes and labels in ggplot2."
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Preparing the data",
+    "text": "Preparing the data\nLoad required libraries:\n\nlibrary(dplyr)\nlibrary(ggplot2)\ntheme_set(theme_linedraw(base_size = 15))\n\nGenerate cell viability and viable cell density data:\n\ncell_viability &lt;- data.frame(\n  day = rep(1:4, 2),\n  viability = c(0.89, 0.88, 0.77, 0.66, 0.55, 0.45, 0.35, 0.25),\n  vcd = c(7, 9, 12, 15, 3, 4, 7, 8),\n  has_puromycin = c(rep(\"no\", 4), rep(\"yes\", 4))\n)\ncell_viability$day &lt;- factor(cell_viability$day)"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Percent sign (%) and breaks",
+    "text": "Percent sign (%) and breaks\nThe variable viability is stored as a fraction, so scales::label_percent() converts the y-axis tick labels to percentages without changing the underlying data.\n\nggplot(\n  cell_viability, \n  aes(day, viability, fill = has_puromycin)\n) +\n  geom_col(position = position_dodge(width = 0.9)) +\n  geom_text(\n    aes(label = paste(viability, \"%\")),\n    vjust = -1,\n    position = position_dodge(width = 0.9)\n  ) +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viability\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 1.001), \n    n.breaks = 10, \n    labels = scales::label_percent(), \n    expand = expansion(0)\n  )"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Custom labels using ggtext or plotmath",
+    "text": "Custom labels using ggtext or plotmath\nAxis titles sometimes need symbols or formatting that plain text can’t produce, like superscripts, Greek letters, or mathematical expressions. Two common ways to handle this: ggtext, which renders markdown/HTML in plot text, or base R’s plotmath, which renders math expressions.\n\nUsing ggtext\nUnicode characters cover most special symbols directly and ggplot2 takes care of the rendering. element_markdown() from ggtext can be used to display native markdown text.\nSome unicode codes I use a lot are mu (U00B5 or U03BC), degree (U00B0), plus-minus (U00B1), and multiply (U00D7).\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n  )\n\n\n\n\n\n\n\n\n\n\nUsing plotmath\nWe can alternatively use the plotmath package to render mathematical annotations. expression() builds a plotmath expression instead of a string, so %*% renders as a multiplication sign and 10^6 renders as a real superscript. More details on expression formating can be found here.\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = expression(\"Viable cell density\" %*% 10^6),\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    # axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank()\n  )"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Chemical formulae",
+    "text": "Chemical formulae\nThe same ggtext markup can be used to display chemical formulae as well.\nNote: The puromycin formula is gibberish. This is for demonstration only.\n\ncell_viability$has_puromycin &lt;- factor(\n  cell_viability$has_puromycin,\n  levels = c(\"no\", \"yes\"),\n  labels = c(\n    \"**No** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\",\n    \"**0.25 M** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\"\n  )\n)\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  facet_grid(~has_puromycin) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n    legend.text = ggtext::element_markdown(),\n    strip.background = element_rect(fill = \"gray90\"),\n    strip.text.x = ggtext::element_markdown(color = \"black\"),\n    strip.text.y = ggtext::element_markdown(color = \"black\"),\n    legend.position = \"bottom\"\n  )"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Shubham Dutta, Ph.D.",
+    "section": "",
+    "text": "I am the Senior Research Scientist at the Massbiologics working on antibody development for pre-clinical studies in non-human primates.\nThis is my personal site, where I share notes on data analysis, visualization, and other random stuff.\n\nExperience\nMassbiologics\n- Senior Research Scientist (January 2024 - present)\n- Scientist II (September 2020 - January 2024)\nTotient Inc.\n- Scientist II (September 2018 - January 2020)\nUMass Medical School\n- Postdoctoral associate (May 2018 - August 2018)\n\n\nEducation\nPh.D., Biomedical Sciences (2011-2018)\nUniversity of Massachusetts Medical School, Worcester, MA\n\nMS, Biophysics and Molecular Biology (2008-2010)\nUniversity of Calcutta, Kolkata, WB\nBS, Microbiology (2005-2008)\nUniversity of Calcutta, Kolkata, WB"
+  },
+  {
+    "objectID": "projects/angiomotins/angiomotins.html",
+    "href": "projects/angiomotins/angiomotins.html",
+    "title": "Angiomotins link F-actin architecture to Hippo pathway signaling",
+    "section": "",
+    "text": "The Hippo pathway regulates the transcriptional coactivator YAP to control cell proliferation, organ size, and stem cell maintenance. Multiple factors, such as substrate stiffness, cell density, and G protein-coupled receptor signaling, regulate YAP through their effects on the F-actin cytoskeleton, although the mechanism is not known. Here we show that angiomotin proteins (AMOT130, AMOTL1, and AMOTL2) connect F-actin architecture to YAP regulation. First, we show that angiomotins are required to relocalize YAP to the cytoplasm in response to various manipulations that perturb the actin cytoskeleton. Second, angiomotins associate with F-actin through a conserved F-actin-binding domain, and mutants defective for F-actin binding show enhanced ability to retain YAP in the cytoplasm. Third, F-actin and YAP compete for binding to AMOT130, explaining how F-actin inhibits AMOT130-mediated cytoplasmic retention of YAP. Furthermore, we find that LATS can synergize with F-actin perturbations by phosphorylating free AMOT130 to keep it from associating with F-actin. Together these results uncover a mechanism for how F-actin levels modulate YAP localization, allowing cells to make developmental and proliferative decisions based on diverse inputs that regulate actin architecture.\n\n\n\nModel of F-actin–regulated angiomotin (AMOT) inhibition of YAP."
+  },
+  {
+    "objectID": "projects/angiomotins/angiomotins.html#synopsis",
+    "href": "projects/angiomotins/angiomotins.html#synopsis",
+    "title": "Angiomotins link F-actin architecture to Hippo pathway signaling",
+    "section": "",
+    "text": "The Hippo pathway regulates the transcriptional coactivator YAP to control cell proliferation, organ size, and stem cell maintenance. Multiple factors, such as substrate stiffness, cell density, and G protein-coupled receptor signaling, regulate YAP through their effects on the F-actin cytoskeleton, although the mechanism is not known. Here we show that angiomotin proteins (AMOT130, AMOTL1, and AMOTL2) connect F-actin architecture to YAP regulation. First, we show that angiomotins are required to relocalize YAP to the cytoplasm in response to various manipulations that perturb the actin cytoskeleton. Second, angiomotins associate with F-actin through a conserved F-actin-binding domain, and mutants defective for F-actin binding show enhanced ability to retain YAP in the cytoplasm. Third, F-actin and YAP compete for binding to AMOT130, explaining how F-actin inhibits AMOT130-mediated cytoplasmic retention of YAP. Furthermore, we find that LATS can synergize with F-actin perturbations by phosphorylating free AMOT130 to keep it from associating with F-actin. Together these results uncover a mechanism for how F-actin levels modulate YAP localization, allowing cells to make developmental and proliferative decisions based on diverse inputs that regulate actin architecture.\n\n\n\nModel of F-actin–regulated angiomotin (AMOT) inhibition of YAP."
+  },
+  {
+    "objectID": "projects/angiomotins/angiomotins.html#reference",
+    "href": "projects/angiomotins/angiomotins.html#reference",
+    "title": "Angiomotins link F-actin architecture to Hippo pathway signaling",
+    "section": "Reference",
+    "text": "Reference\nMana-Capelli S, Paramasivam M, Dutta S, McCollum D. Angiomotins link F-actin architecture to Hippo pathway signaling. Mol Biol Cell. 2014 May;25(10):1676-85. doi: 10.1091/mbc.E13-11-0701."
+  },
+  {
+    "objectID": "projects/trip6/trip6.html",
+    "href": "projects/trip6/trip6.html",
+    "title": "TRIP6 inhibits Hippo signaling in response to tension at adherens junctions",
+    "section": "",
+    "text": "The transcriptional co-activator YAP controls cell proliferation, survival, and tissue regeneration in response to changes in the mechanical environment. It is not known how mechanical stimuli such as tension are sensed and how the signal is transduced to control YAP activity. Here, we show that the LIM domain protein TRIP6 acts as part of a mechanotransduction pathway at adherens junctions to promote YAP activity by inhibiting the LATS1/2 kinases. Previous studies showed that vinculin at adherens junctions becomes activated by mechanical tension. We show that vinculin inhibits Hippo signaling by recruiting TRIP6 to adherens junctions and stimulating its binding to and inhibition of LATS1/2 in response to tension. TRIP6 competes with MOB1 for binding to LATS1/2 thereby blocking MOB1 from recruiting the LATS1/2 activating kinases MST1/2. Together, these findings reveal a novel pathway that responds to tension at adherens junctions to control Hippo pathway signaling.\n\n\n\nTRIP6 inhibits Hippo signaling in response to tension at adherens junctions\n\n\n\n\nMechanical tension regulates Hippo signaling via the mechanosensor vinculin at adherens junctions. Tension-activated vinculin stimulates binding of LATS1/2 to TRIP6, which blocks the association of LATS1/2 with its activator MOB1, thereby increasing YAP activity.\n\nTRIP6 and LATS1/2 interact at adherens junctions in a tension-dependent manner.\nTRIP6 inhibits LATS1/2 by competing for its interaction with the activator protein MOB1.\nVinculin recruits TRIP6 to adherens junctions to activate YAP in response to mechanical tension. ## Reference\n\nDutta S, Mana-Capelli S, Paramasivam M, Dasgupta I, Cirka H, Billiar K, McCollum D. TRIP6 inhibits Hippo signaling in response to tension at adherens junctions. EMBO Rep. 2018 Feb;19(2):337-350. doi: 10.15252/embr.201744777."
+  },
+  {
+    "objectID": "projects/trip6/trip6.html#synopsis",
+    "href": "projects/trip6/trip6.html#synopsis",
+    "title": "TRIP6 inhibits Hippo signaling in response to tension at adherens junctions",
+    "section": "",
+    "text": "The transcriptional co-activator YAP controls cell proliferation, survival, and tissue regeneration in response to changes in the mechanical environment. It is not known how mechanical stimuli such as tension are sensed and how the signal is transduced to control YAP activity. Here, we show that the LIM domain protein TRIP6 acts as part of a mechanotransduction pathway at adherens junctions to promote YAP activity by inhibiting the LATS1/2 kinases. Previous studies showed that vinculin at adherens junctions becomes activated by mechanical tension. We show that vinculin inhibits Hippo signaling by recruiting TRIP6 to adherens junctions and stimulating its binding to and inhibition of LATS1/2 in response to tension. TRIP6 competes with MOB1 for binding to LATS1/2 thereby blocking MOB1 from recruiting the LATS1/2 activating kinases MST1/2. Together, these findings reveal a novel pathway that responds to tension at adherens junctions to control Hippo pathway signaling.\n\n\n\nTRIP6 inhibits Hippo signaling in response to tension at adherens junctions\n\n\n\n\nMechanical tension regulates Hippo signaling via the mechanosensor vinculin at adherens junctions. Tension-activated vinculin stimulates binding of LATS1/2 to TRIP6, which blocks the association of LATS1/2 with its activator MOB1, thereby increasing YAP activity.\n\nTRIP6 and LATS1/2 interact at adherens junctions in a tension-dependent manner.\nTRIP6 inhibits LATS1/2 by competing for its interaction with the activator protein MOB1.\nVinculin recruits TRIP6 to adherens junctions to activate YAP in response to mechanical tension. ## Reference\n\nDutta S, Mana-Capelli S, Paramasivam M, Dasgupta I, Cirka H, Billiar K, McCollum D. TRIP6 inhibits Hippo signaling in response to tension at adherens junctions. EMBO Rep. 2018 Feb;19(2):337-350. doi: 10.15252/embr.201744777."
+  },
+  {
+    "objectID": "projects/tidyplate/tidyplate.html",
+    "href": "projects/tidyplate/tidyplate.html",
+    "title": "tidyplate: Transform Microplate Data into Tidy Dataframes",
+    "section": "",
+    "text": "Microtiter plates or microplates have become a standard tool in analytical research and clinical diagnostic testing laboratories. They are convenient, high-throughput tools for organizing tissue culture, PCR tests (such as HIV/ COVID screening), or immunological assays such as ELISA, RIA and FIA. They offer many advantages over traditional assay formats including reduced sample and reagent volumes, increased throughput, and ease of automation. The goal of tidyplate is to help researchers convert different types of microplates into tidy dataframes which can be used in data analysis. tidyplate accepts xlsx and csv files formatted in a specific way as input. tidyplate supports all types of standard microplate formats namely: 6-well, 12-well, 24-well, 48-well, 96-well, 384-well, and 1536-well plates.\ntidyplate has four functions:\n\ntidy_plate: Transforms the input file (xlsx or csv) into a tidy dataframe.\ncheck_plate: Checks whether the input file is valid for use with tidy_plate().\nview_plate_names: Returns names/ id(s) of each plate in the input file.\nbuild_plate: Generates a csv or xlsx template for each plate type.\n\n\n\nTo install tidyplate from CRAN:\n\ninstall.packages(\"tidyplate\")\n\nYou can install the development version of tidyplate from GitHub with:\n\ndevtools::install_github(\"shubhamdutta26/tidyplate\")\n\n\n\n\nThe input excel or csv file should be formatted in a specific way:\n\nTop left corner must hold the name for that plate.\nColumn names should be: 1, 2, 3, and so on and so forth.\nRow names should be: A, B, C, and so on and so forth.\nThere must be an empty row between each plate.\n\n\n\n\nThis is an example which shows you how to use the tidyplate. If the input file is an xlsx file it reads the first sheet by default. Users can specify sheet using the sheet argument for an xlsx file. Users can also specify the variable name of column where well ids will be stored (defaults to “well”). Please make sure that well_id argument does not match individual plate names in the input file.\nFirst check if the input file is valid or not:\n\nlibrary(tidyplate)\nfile &lt;- system.file(\"extdata\", \n                    \"example_12_well.xlsx\", \n                    package = \"tidyplate\")\ncheck_plate(file) # No error for valid file\n\nexample_12_well.xlsx: OK; Plate type: 12-well\n\nincorrect_file &lt;- system.file(\"extdata\",\n                              \"incorrect_format.csv\",\n                              package = \"tidyplate\")\ncheck_plate(incorrect_file) # Error type displayed\n\nError:\n! Verify row and column ids in incorrect_format.csv.\nℹ Expected column ids: 1, 2, 3, and so on.\nℹ Expected row ids: A, B, C, and so on.\nℹ Use the `build_plate()` function to build an empty template.\n\n\nAs mentioned above, the formatting of the input file is very important. A csv or excel template for each plate type can be created using the build_plate function:\n\nbuild_plate(plate_type = 96, \n            n_plates = 2, \n            file_type = \"xlsx\") # default is csv\n\nIf you want to retrieve the names of individual plates:\n\nview_plate_names(file)\n\n[1] \"drug\"             \"cell_line\"        \"percent_survived\"\n\n\nRead and import the file as a tibble:\n\ndata &lt;- tidy_plate(file)\n\nPlate type: 12-well\n\nhead(data)\n\n# A tibble: 6 × 4\n  well  drug      cell_line percent_survived\n  &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;                &lt;int&gt;\n1 A01   Neomycin  HEK293                  60\n2 A02   Puromycin HEK293                  NA\n3 A03   Neomycin  Hela                    52\n4 A04   Puromycin Hela                    18\n5 B01   Neomycin  HEK293                  62\n6 B02   Puromycin HEK293                  23\n\n\nImport multiple csv files into separate tibbles:\n\ncsv_files &lt;- list.files(path = file, \n                        pattern = \"*.csv\",\n                        full.names = TRUE)\n\nnames &lt;- tools::file_path_sans_ext(basename(csv_files))\n\n# Loop through the filenames and assign data\nfor(i in seq_along(csv_files)) {\n  assign(names[i], tidy_plate(csv_files[i]))\n}\n\nImport multiple csv files as a list of tibbles:\n\n# Initialize an empty list to store tibbles for each file\ntb_csv_list &lt;- list()\n\n# Loop through the filenames and assign data\nfor(i in seq_along(csv_files)) {\n  tb_csv_list[[i]] &lt;- tidy_plate(csv_files[i])\n}\n\nFor multiple excel sheets in the same excel file:\n\n# as individual tibbles\nxl_file &lt;- system.file(\"extdata\", \n                       \"multisheet_example.xlsx\", \n                       package = \"tidyplate\")\n\nsheets &lt;- readxl::excel_sheets(xl_file)\n\nfor (sheet in sheets) {\n  tb &lt;- tidy_plate(xl_file, sheet = sheet)\n  name &lt;- paste0(\"tb_\", sheet)\n  assign(name, tb)\n}\n\nPlate type: 6-well\nPlate type: 12-well\nPlate type: 12-well\n\n# as elements of a list\n# Initialize an empty list to store tibbles for each sheet\ntb_xl_list &lt;- list()\n\nfor (sheet in sheets) {\n  tb_xl_list[[sheet]] &lt;- tidy_plate(xl_file, sheet = sheet)\n}\n\nPlate type: 6-well\nPlate type: 12-well\nPlate type: 12-well\n\n\n\n\n\nDutta, Shubham. 2024. Tidyplate: Transform Microplate Data into Tidy Dataframes. https://CRAN.R-project.org/package=tidyplate."
+  },
+  {
+    "objectID": "projects/tidyplate/tidyplate.html#installation",
+    "href": "projects/tidyplate/tidyplate.html#installation",
+    "title": "tidyplate: Transform Microplate Data into Tidy Dataframes",
+    "section": "",
+    "text": "To install tidyplate from CRAN:\n\ninstall.packages(\"tidyplate\")\n\nYou can install the development version of tidyplate from GitHub with:\n\ndevtools::install_github(\"shubhamdutta26/tidyplate\")"
+  },
+  {
+    "objectID": "projects/tidyplate/tidyplate.html#formating-the-input-data-file",
+    "href": "projects/tidyplate/tidyplate.html#formating-the-input-data-file",
+    "title": "tidyplate: Transform Microplate Data into Tidy Dataframes",
+    "section": "",
+    "text": "The input excel or csv file should be formatted in a specific way:\n\nTop left corner must hold the name for that plate.\nColumn names should be: 1, 2, 3, and so on and so forth.\nRow names should be: A, B, C, and so on and so forth.\nThere must be an empty row between each plate."
+  },
+  {
+    "objectID": "projects/tidyplate/tidyplate.html#example",
+    "href": "projects/tidyplate/tidyplate.html#example",
+    "title": "tidyplate: Transform Microplate Data into Tidy Dataframes",
+    "section": "",
+    "text": "This is an example which shows you how to use the tidyplate. If the input file is an xlsx file it reads the first sheet by default. Users can specify sheet using the sheet argument for an xlsx file. Users can also specify the variable name of column where well ids will be stored (defaults to “well”). Please make sure that well_id argument does not match individual plate names in the input file.\nFirst check if the input file is valid or not:\n\nlibrary(tidyplate)\nfile &lt;- system.file(\"extdata\", \n                    \"example_12_well.xlsx\", \n                    package = \"tidyplate\")\ncheck_plate(file) # No error for valid file\n\nexample_12_well.xlsx: OK; Plate type: 12-well\n\nincorrect_file &lt;- system.file(\"extdata\",\n                              \"incorrect_format.csv\",\n                              package = \"tidyplate\")\ncheck_plate(incorrect_file) # Error type displayed\n\nError:\n! Verify row and column ids in incorrect_format.csv.\nℹ Expected column ids: 1, 2, 3, and so on.\nℹ Expected row ids: A, B, C, and so on.\nℹ Use the `build_plate()` function to build an empty template.\n\n\nAs mentioned above, the formatting of the input file is very important. A csv or excel template for each plate type can be created using the build_plate function:\n\nbuild_plate(plate_type = 96, \n            n_plates = 2, \n            file_type = \"xlsx\") # default is csv\n\nIf you want to retrieve the names of individual plates:\n\nview_plate_names(file)\n\n[1] \"drug\"             \"cell_line\"        \"percent_survived\"\n\n\nRead and import the file as a tibble:\n\ndata &lt;- tidy_plate(file)\n\nPlate type: 12-well\n\nhead(data)\n\n# A tibble: 6 × 4\n  well  drug      cell_line percent_survived\n  &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;                &lt;int&gt;\n1 A01   Neomycin  HEK293                  60\n2 A02   Puromycin HEK293                  NA\n3 A03   Neomycin  Hela                    52\n4 A04   Puromycin Hela                    18\n5 B01   Neomycin  HEK293                  62\n6 B02   Puromycin HEK293                  23\n\n\nImport multiple csv files into separate tibbles:\n\ncsv_files &lt;- list.files(path = file, \n                        pattern = \"*.csv\",\n                        full.names = TRUE)\n\nnames &lt;- tools::file_path_sans_ext(basename(csv_files))\n\n# Loop through the filenames and assign data\nfor(i in seq_along(csv_files)) {\n  assign(names[i], tidy_plate(csv_files[i]))\n}\n\nImport multiple csv files as a list of tibbles:\n\n# Initialize an empty list to store tibbles for each file\ntb_csv_list &lt;- list()\n\n# Loop through the filenames and assign data\nfor(i in seq_along(csv_files)) {\n  tb_csv_list[[i]] &lt;- tidy_plate(csv_files[i])\n}\n\nFor multiple excel sheets in the same excel file:\n\n# as individual tibbles\nxl_file &lt;- system.file(\"extdata\", \n                       \"multisheet_example.xlsx\", \n                       package = \"tidyplate\")\n\nsheets &lt;- readxl::excel_sheets(xl_file)\n\nfor (sheet in sheets) {\n  tb &lt;- tidy_plate(xl_file, sheet = sheet)\n  name &lt;- paste0(\"tb_\", sheet)\n  assign(name, tb)\n}\n\nPlate type: 6-well\nPlate type: 12-well\nPlate type: 12-well\n\n# as elements of a list\n# Initialize an empty list to store tibbles for each sheet\ntb_xl_list &lt;- list()\n\nfor (sheet in sheets) {\n  tb_xl_list[[sheet]] &lt;- tidy_plate(xl_file, sheet = sheet)\n}\n\nPlate type: 6-well\nPlate type: 12-well\nPlate type: 12-well"
+  },
+  {
+    "objectID": "projects/tidyplate/tidyplate.html#references",
+    "href": "projects/tidyplate/tidyplate.html#references",
+    "title": "tidyplate: Transform Microplate Data into Tidy Dataframes",
+    "section": "",
+    "text": "Dutta, Shubham. 2024. Tidyplate: Transform Microplate Data into Tidy Dataframes. https://CRAN.R-project.org/package=tidyplate."
+  },
+  {
+    "objectID": "projects/ho-1/ho-1.html",
+    "href": "projects/ho-1/ho-1.html",
+    "title": "Translocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against NSAIDs",
+    "section": "",
+    "text": "The mechanism of action of heme oxygenase-1 (HO-1) in mitochondrial oxidative stress (MOS)-mediated apoptotic tissue injury was investigated. MOS-mediated gastric mucosal apoptosis and injury were introduced in rat by indomethacin, a non-steroidal anti-inflammatory drug. Here, we report that HO-1 was not only induced but also translocated to mitochondria during gastric mucosal injury to favor repair mechanisms. Furthermore, mitochondrial translocation of HO-1 resulted in the prevention of MOS and mitochondrial pathology as evident from the restoration of the complex I-driven mitochondrial respiratory control ratio and transmembrane potential. Mitochondrial translocation of HO-1 also resulted in time-dependent inhibition of apoptosis. We searched for the plausible mechanisms responsible for HO-1 induction and mitochondrial localization. Free heme, the substrate for HO-1, was increased inside mitochondria during gastric injury, and mitochondrial entry of HO-1 decreased intramitochondrial free heme content, suggesting that a purpose of mitochondrial translocation of HO-1 is to detoxify accumulated heme. Heme may activate nuclear translocation of NF-E2-related factor 2 to induce HO-1 through reactive oxygen species generation. Electrophoretic mobility shift assay and chromatin immunoprecipitation studies indicated nuclear translocation of NF-E2-related factor 2 and its binding to HO-1 promoter to induce HO-1 expression during gastric injury. Inhibition of HO-1 by zinc protoporphyrin aggravated the mucosal injury and delayed healing. Zinc protoporphyrin further reduced the respiratory control ratio and transmembrane potential and enhanced MOS and apoptosis. In contrast, induction of HO-1 by cobalt protoporphyrin reduced MOS, corrected mitochondrial dysfunctions, and prevented apoptosis and gastric injury. Thus, induction and mitochondrial localization of HO-1 are a novel cytoprotective mechanism against MOS-mediated apoptotic tissue injury.\n\n\n\nZnPP aggravates gastric mucosal injury and slows down healing process in vivo."
+  },
+  {
+    "objectID": "projects/ho-1/ho-1.html#synopsis",
+    "href": "projects/ho-1/ho-1.html#synopsis",
+    "title": "Translocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against NSAIDs",
+    "section": "",
+    "text": "The mechanism of action of heme oxygenase-1 (HO-1) in mitochondrial oxidative stress (MOS)-mediated apoptotic tissue injury was investigated. MOS-mediated gastric mucosal apoptosis and injury were introduced in rat by indomethacin, a non-steroidal anti-inflammatory drug. Here, we report that HO-1 was not only induced but also translocated to mitochondria during gastric mucosal injury to favor repair mechanisms. Furthermore, mitochondrial translocation of HO-1 resulted in the prevention of MOS and mitochondrial pathology as evident from the restoration of the complex I-driven mitochondrial respiratory control ratio and transmembrane potential. Mitochondrial translocation of HO-1 also resulted in time-dependent inhibition of apoptosis. We searched for the plausible mechanisms responsible for HO-1 induction and mitochondrial localization. Free heme, the substrate for HO-1, was increased inside mitochondria during gastric injury, and mitochondrial entry of HO-1 decreased intramitochondrial free heme content, suggesting that a purpose of mitochondrial translocation of HO-1 is to detoxify accumulated heme. Heme may activate nuclear translocation of NF-E2-related factor 2 to induce HO-1 through reactive oxygen species generation. Electrophoretic mobility shift assay and chromatin immunoprecipitation studies indicated nuclear translocation of NF-E2-related factor 2 and its binding to HO-1 promoter to induce HO-1 expression during gastric injury. Inhibition of HO-1 by zinc protoporphyrin aggravated the mucosal injury and delayed healing. Zinc protoporphyrin further reduced the respiratory control ratio and transmembrane potential and enhanced MOS and apoptosis. In contrast, induction of HO-1 by cobalt protoporphyrin reduced MOS, corrected mitochondrial dysfunctions, and prevented apoptosis and gastric injury. Thus, induction and mitochondrial localization of HO-1 are a novel cytoprotective mechanism against MOS-mediated apoptotic tissue injury.\n\n\n\nZnPP aggravates gastric mucosal injury and slows down healing process in vivo."
+  },
+  {
+    "objectID": "projects/ho-1/ho-1.html#reference",
+    "href": "projects/ho-1/ho-1.html#reference",
+    "title": "Translocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against NSAIDs",
+    "section": "Reference",
+    "text": "Reference\nBindu S, Pal C, Dey S, Goyal M, Alam A, Iqbal MS, Dutta S, Sarkar S, Kumar R, Maity P, Bandyopadhyay U. Translocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against non-steroidal anti-inflammatory drug-induced mitochondrial oxidative stress, apoptosis, and gastric mucosal injury. J Biol Chem. 2011 Nov 11;286(45):39387-402. doi: 10.1074/jbc.M111.279893."
+  },
+  {
+    "objectID": "projects/immunotherapy/immunotherapy.html",
+    "href": "projects/immunotherapy/immunotherapy.html",
+    "title": "Emerging Trends in Immunotherapy for Cancer",
+    "section": "",
+    "text": "Recent advances in cancer immunology have enabled the discovery of promising immunotherapies for various malignancies that have shifted the cancer treatment paradigm. The innovative research and clinical advancements of immunotherapy approaches have prolonged the survival of patients with relapsed or refractory metastatic cancers. Since the U.S. FDA approved the first immune checkpoint inhibitor in 2011, the field of cancer immunotherapy has grown exponentially. Multiple therapeutic approaches or agents to manipulate different aspects of the immune system are currently in development. These include cancer vaccines, adoptive cell therapies (such as CAR-T or NK cell therapy), monoclonal antibodies, cytokine therapies, oncolytic viruses, and inhibitors targeting immune checkpoints that have demonstrated promising clinical efficacy. Multiple immunotherapeutic approaches have been approved for specific cancer treatments, while others are currently in preclinical and clinical trial stages. Given the success of immunotherapy, there has been a tremendous thrust to improve the clinical efficacy of various agents and strategies implemented so far. Here, we present a comprehensive overview of the development and clinical implementation of various immunotherapy approaches currently being used to treat cancer. We also highlight the latest developments, emerging trends, limitations, and future promises of cancer immunotherapy.\n\n\n\nIllustration depicting various immunotherapy approaches for cancer treatment."
+  },
+  {
+    "objectID": "projects/immunotherapy/immunotherapy.html#synopsis",
+    "href": "projects/immunotherapy/immunotherapy.html#synopsis",
+    "title": "Emerging Trends in Immunotherapy for Cancer",
+    "section": "",
+    "text": "Recent advances in cancer immunology have enabled the discovery of promising immunotherapies for various malignancies that have shifted the cancer treatment paradigm. The innovative research and clinical advancements of immunotherapy approaches have prolonged the survival of patients with relapsed or refractory metastatic cancers. Since the U.S. FDA approved the first immune checkpoint inhibitor in 2011, the field of cancer immunotherapy has grown exponentially. Multiple therapeutic approaches or agents to manipulate different aspects of the immune system are currently in development. These include cancer vaccines, adoptive cell therapies (such as CAR-T or NK cell therapy), monoclonal antibodies, cytokine therapies, oncolytic viruses, and inhibitors targeting immune checkpoints that have demonstrated promising clinical efficacy. Multiple immunotherapeutic approaches have been approved for specific cancer treatments, while others are currently in preclinical and clinical trial stages. Given the success of immunotherapy, there has been a tremendous thrust to improve the clinical efficacy of various agents and strategies implemented so far. Here, we present a comprehensive overview of the development and clinical implementation of various immunotherapy approaches currently being used to treat cancer. We also highlight the latest developments, emerging trends, limitations, and future promises of cancer immunotherapy.\n\n\n\nIllustration depicting various immunotherapy approaches for cancer treatment."
+  },
+  {
+    "objectID": "projects/immunotherapy/immunotherapy.html#reference",
+    "href": "projects/immunotherapy/immunotherapy.html#reference",
+    "title": "Emerging Trends in Immunotherapy for Cancer",
+    "section": "Reference",
+    "text": "Reference\nMishra, Alok K., Amjad Ali, Shubham Dutta, Shahid Banday, and Sunil K. Malonia. 2022. “Emerging Trends in Immunotherapy for Cancer” Diseases 10, no. 3: 60. doi: 10.3390/diseases10030060"
+  },
+  {
+    "objectID": "projects/crispr/crispr.html",
+    "href": "projects/crispr/crispr.html",
+    "title": "Frontiers of CRISPR-Cas9 for Cancer Research and Therapy",
+    "section": "",
+    "text": "In recent years, gene editing technologies have made significant progress in understanding gene function and regulation. The Clustered regularly interspaced short palindromic repeats-CRISPR associated protein 9 (CRISPR-Cas9) system has emerged as a versatile tool for gene editing and genome engineering. In the last few years, CRISPR-Cas9 technology has been widely applied to cancer research, mainly to understand the mechanisms of oncogenesis, drug-target identification, and the development of various cell-based therapies. When combined with genome sequence information, this technology has also shown promise to cure heritable genetic disorders. This review summarizes some of the recent developments and preclinical applications of CRISPR-Cas9 technology in cancer research and therapy. We will discuss how CRISPR based approaches have been used as a tool to identify cancer-specific vulnerabilities and potential applications in cancer therapy.\n\n\n\nSchematic representation of CRISPR-Cas9-mediated genome editing.\n\n\n\n\n(a) The Cas9 nuclease is directed to the target DNA by complementary base pairing with its bound guide RNA in which the target site is followed by a PAM sequence (NAG, NAG). Cleavage of the dsDNA promotes either error-prone NHEJ or HDR.\n(b) Two guide RNAs (targeting two different sites, namely target A and target B) can be used simultaneously to remove a longer stretch of DNA and a new DNA can be inserted using a donor DNA using HDR.\n(c) Catalytically dead Cas9 (dCas9) can be tagged with transcription activators (or repressors) and fluorescent proteins (such as GFP) to regulate gene expression or visualization. CRISPR, clustered regularly interspaced short palindromic repeats; Cas9, CRISPR associated protein 9; dCas9, dead CRISPR associated protein 9; gRNA, guide RNA; mRNA, messenger RNA; dsDNA, double stranded deoxyribonucleic acid; PAM, protospacer adjacent motif; NHEJ, non-homologous"
+  },
+  {
+    "objectID": "projects/crispr/crispr.html#synopsis",
+    "href": "projects/crispr/crispr.html#synopsis",
+    "title": "Frontiers of CRISPR-Cas9 for Cancer Research and Therapy",
+    "section": "",
+    "text": "In recent years, gene editing technologies have made significant progress in understanding gene function and regulation. The Clustered regularly interspaced short palindromic repeats-CRISPR associated protein 9 (CRISPR-Cas9) system has emerged as a versatile tool for gene editing and genome engineering. In the last few years, CRISPR-Cas9 technology has been widely applied to cancer research, mainly to understand the mechanisms of oncogenesis, drug-target identification, and the development of various cell-based therapies. When combined with genome sequence information, this technology has also shown promise to cure heritable genetic disorders. This review summarizes some of the recent developments and preclinical applications of CRISPR-Cas9 technology in cancer research and therapy. We will discuss how CRISPR based approaches have been used as a tool to identify cancer-specific vulnerabilities and potential applications in cancer therapy.\n\n\n\nSchematic representation of CRISPR-Cas9-mediated genome editing.\n\n\n\n\n(a) The Cas9 nuclease is directed to the target DNA by complementary base pairing with its bound guide RNA in which the target site is followed by a PAM sequence (NAG, NAG). Cleavage of the dsDNA promotes either error-prone NHEJ or HDR.\n(b) Two guide RNAs (targeting two different sites, namely target A and target B) can be used simultaneously to remove a longer stretch of DNA and a new DNA can be inserted using a donor DNA using HDR.\n(c) Catalytically dead Cas9 (dCas9) can be tagged with transcription activators (or repressors) and fluorescent proteins (such as GFP) to regulate gene expression or visualization. CRISPR, clustered regularly interspaced short palindromic repeats; Cas9, CRISPR associated protein 9; dCas9, dead CRISPR associated protein 9; gRNA, guide RNA; mRNA, messenger RNA; dsDNA, double stranded deoxyribonucleic acid; PAM, protospacer adjacent motif; NHEJ, non-homologous"
+  },
+  {
+    "objectID": "projects/crispr/crispr.html#reference",
+    "href": "projects/crispr/crispr.html#reference",
+    "title": "Frontiers of CRISPR-Cas9 for Cancer Research and Therapy",
+    "section": "Reference",
+    "text": "Reference\nBanerjee A, Malonia SK, Dutta S. Frontiers of CRISPR-Cas9 for Cancer Research and Therapy. J Explor Res Pharmacol. 2021;6(3):96-104. doi: 10.14218/JERP.2020.00033."
+  },
+  {
+    "objectID": "blogs/pymol-setup/pymol.html",
+    "href": "blogs/pymol-setup/pymol.html",
+    "title": "Setting up Pymol for visualizations",
+    "section": "",
+    "text": "This is how I setup Pymol before visualization.\n\nOpen Pymol and load the pdb file.\nSet background color to white: Display &gt; Background &gt; White\nTo hide double bonds: Display &gt; Uncheck Show Valences\nTo display the molecule in maximum quality: Display &gt; Quality &gt; Maximum Quality\nTo only show the side chain of a residue: set cartoon_side_chain_helper, 1 or set cartoon_side_chain_helper, on"
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html",
+    "title": "Splines in ggplot2",
+    "section": "",
+    "text": "When visualizing trend data, standard line plots can sometimes look a bit too jagged. If you want to create a smoother, more aesthetically pleasing curve through your data points, splines are a great solution.\nIn this post, we’ll look at how to easily replace simple line plots with X-splines in ggplot2 using the geom_xspline() function from the ggfun package."
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
+    "title": "Splines in ggplot2",
+    "section": "The Jagged Baseline",
+    "text": "The Jagged Baseline\nFirst, let’s look at the default behavior. We’ll set up a simple dataset with two groups and plot it using the standard geom_line(). Notice how the lines connect point-to-point with sharp angles.\n\nlibrary(ggplot2)\n\ndf &lt;- data.frame(\n  group = rep(LETTERS[1:2], each = 10),\n  x = rep(1:10, 2),\n  y = c(2, 5, 9, 15, 19, 19, 15, 9, 5, 2, \n        1, 0, 3, 2, 3, 4, 14, 24, 24, 25) * 0.01\n)\n\nplot &lt;- ggplot(\n  df, \n  aes(x, y, group=group, color=factor(group))\n) +\n  geom_point(aes(color = group)) +\n  geom_text(\n    aes(label=y),\n    hjust=1, \n    vjust=-1,\n    show.legend = FALSE\n  ) +\n  scale_y_continuous(\n    limits = c(0, 0.35),\n    labels = scales::percent\n  ) +\n  scale_x_continuous(\n    breaks = 1:10,\n    minor_breaks = NULL\n  ) +\n  theme_bw()\n\nplot + geom_line()"
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
+    "title": "Splines in ggplot2",
+    "section": "Adding a Subtle Curve",
+    "text": "Adding a Subtle Curve\nTo smooth things out, we replace geom_line() with ggfun::geom_xspline(). The most important argument here is shape.\nWhen shape is negative, the curve is forced to pass exactly through the data points (interpolation). A value close to zero (like -0.1) gives a very subtle rounding to the corners.\n\nplot + ggfun::geom_xspline(shape = -0.1)"
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
+    "title": "Splines in ggplot2",
+    "section": "A Much Smoother Curve",
+    "text": "A Much Smoother Curve\nIf we decrease the shape value further to -0.5, the spline bows out more between the points.\n\nplot + ggfun::geom_xspline(shape = -0.5)"
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#approximating-the-points",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#approximating-the-points",
+    "title": "Splines in ggplot2",
+    "section": "Approximating the Points",
+    "text": "Approximating the Points\nWhen shape is greater than 0, the line acts as an approximation.\n\nplot + ggfun::geom_xspline(shape = 0.5)"
+  },
+  {
+    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#summary",
+    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#summary",
+    "title": "Splines in ggplot2",
+    "section": "Summary",
+    "text": "Summary\n\nUse geom_line() for strict point-to-point connections.\nUse geom_xspline(shape = -0.5) (or similar negative values) for a smooth curve that still honors your exact data values.\nUse geom_xspline(shape = 0.5) (or positive values) when you want to show a generalized, smoothed trend that approximations the data path."
+  },
+  {
+    "objectID": "blogs/elisa-curve-fitting/elisa_fit.html",
+    "href": "blogs/elisa-curve-fitting/elisa_fit.html",
+    "title": "ELISA curve fitting using ggplot2",
+    "section": "",
+    "text": "Here is an example of how to fit and analyse ELISA data using ggplot2 and drc.\n\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyplate)\nlibrary(drc)\nlibrary(ggtext)\n\nFirst we import plate data using the tidy_plate function from the tidyplate package:\n\n# Converts microwell shaped data to tidy data\nraw_data &lt;- tidy_plate(\"data/elisa_example.xlsx\")\nglimpse(raw_data)\n\nRows: 50\nColumns: 10\n$ well                &lt;chr&gt; \"A01\", \"A02\", \"A03\", \"A04\", \"A05\", \"A06\", \"B01\", \"…\n$ coat_protein_name   &lt;chr&gt; \"sBACE\", \"sBACE\", \"sBACE\", \"sBACE\", \"sBACE\", \"sBAC…\n$ coat_protein_ug     &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, …\n$ coat_protein_source &lt;chr&gt; \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"…\n$ primary_mab_name    &lt;chr&gt; \"aBACE\", \"aBACE\", \"aBACE\", \"aSARS\", \"aSARS\", \"aSAR…\n$ primary_mab_clone   &lt;chr&gt; \"6626.1000000000004\", \"6626.1000000000004\", \"6626.…\n$ primary_mab_conc    &lt;dbl&gt; 10.0000000, 10.0000000, 10.0000000, 10.0000000, 10…\n$ secondary_mab_name  &lt;chr&gt; \"goat-aHuman\", \"goat-aHuman\", \"goat-aHuman\", \"goat…\n$ secondary_mab_dil   &lt;chr&gt; \"1to5000\", \"1to5000\", \"1to5000\", \"1to5000\", \"1to50…\n$ od450               &lt;dbl&gt; 1.396, 1.170, 1.299, 1.324, 1.170, 1.299, 1.374, 1…"
+  },
+  {
+    "objectID": "blogs/elisa-curve-fitting/elisa_fit.html#introduction",
+    "href": "blogs/elisa-curve-fitting/elisa_fit.html#introduction",
+    "title": "ELISA curve fitting using ggplot2",
+    "section": "",
+    "text": "Here is an example of how to fit and analyse ELISA data using ggplot2 and drc.\n\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyplate)\nlibrary(drc)\nlibrary(ggtext)\n\nFirst we import plate data using the tidy_plate function from the tidyplate package:\n\n# Converts microwell shaped data to tidy data\nraw_data &lt;- tidy_plate(\"data/elisa_example.xlsx\")\nglimpse(raw_data)\n\nRows: 50\nColumns: 10\n$ well                &lt;chr&gt; \"A01\", \"A02\", \"A03\", \"A04\", \"A05\", \"A06\", \"B01\", \"…\n$ coat_protein_name   &lt;chr&gt; \"sBACE\", \"sBACE\", \"sBACE\", \"sBACE\", \"sBACE\", \"sBAC…\n$ coat_protein_ug     &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, …\n$ coat_protein_source &lt;chr&gt; \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"NS0\", \"…\n$ primary_mab_name    &lt;chr&gt; \"aBACE\", \"aBACE\", \"aBACE\", \"aSARS\", \"aSARS\", \"aSAR…\n$ primary_mab_clone   &lt;chr&gt; \"6626.1000000000004\", \"6626.1000000000004\", \"6626.…\n$ primary_mab_conc    &lt;dbl&gt; 10.0000000, 10.0000000, 10.0000000, 10.0000000, 10…\n$ secondary_mab_name  &lt;chr&gt; \"goat-aHuman\", \"goat-aHuman\", \"goat-aHuman\", \"goat…\n$ secondary_mab_dil   &lt;chr&gt; \"1to5000\", \"1to5000\", \"1to5000\", \"1to5000\", \"1to50…\n$ od450               &lt;dbl&gt; 1.396, 1.170, 1.299, 1.324, 1.170, 1.299, 1.374, 1…"
+  },
+  {
+    "objectID": "blogs/elisa-curve-fitting/elisa_fit.html#prepare-data-before-plotting",
+    "href": "blogs/elisa-curve-fitting/elisa_fit.html#prepare-data-before-plotting",
+    "title": "ELISA curve fitting using ggplot2",
+    "section": "Prepare data before plotting",
+    "text": "Prepare data before plotting\n\n# Extracting blank values and calculating their mean\nblank_data &lt;- raw_data |&gt;\n    dplyr::filter(primary_mab_name == \"blank\")\nmean_blank &lt;- mean(blank_data[[\"od450\"]], na.rm = TRUE)\n\n# Blanking OD values and summarizing their mean and standard deviation\nsummary &lt;- raw_data |&gt;\n    dplyr::filter(primary_mab_name != \"blank\") |&gt;\n    mutate(blanked_od = od450 - mean_blank) |&gt;\n    group_by(primary_mab_name, primary_mab_conc) |&gt;\n    summarise(\n      mean_od = mean(blanked_od, na.rm = TRUE),\n      sd_od = sd(blanked_od, na.rm = TRUE),\n      .groups = 'drop'\n    )\nhead(summary)\n\n# A tibble: 6 × 4\n  primary_mab_name primary_mab_conc mean_od  sd_od\n  &lt;chr&gt;                       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;\n1 aBACE                     0.00244   0.138 0.0797\n2 aBACE                     0.00977   0.214 0.0626\n3 aBACE                     0.0391    0.395 0.0644\n4 aBACE                     0.156     0.740 0.0531\n5 aBACE                     0.625     1.11  0.0358\n6 aBACE                     2.5       1.28  0.0486"
+  },
+  {
+    "objectID": "blogs/elisa-curve-fitting/elisa_fit.html#compute-ec50-for-each-antibody",
+    "href": "blogs/elisa-curve-fitting/elisa_fit.html#compute-ec50-for-each-antibody",
+    "title": "ELISA curve fitting using ggplot2",
+    "section": "Compute EC50 for each antibody",
+    "text": "Compute EC50 for each antibody\n\n# Helper function to fit 4PL and extract EC50 + CI\nfit_one_ab &lt;- function(df) {\n  fit &lt;- drm(\n    mean_od ~ primary_mab_conc,\n    data = df,\n    fct  = LL.4()\n  )\n\n  ed &lt;- ED(fit, 50, interval = \"delta\")\n  pars &lt;- coef(fit)\n  bottom &lt;- pars[\"c:(Intercept)\"]\n  top    &lt;- pars[\"d:(Intercept)\"]\n\n  y_ec50 &lt;- bottom + (top - bottom) / 2\n\n  tibble(\n    antibody = df$antibody[1],\n    ec50     = ed[1, \"Estimate\"],\n    ec50_se  = ed[1, \"Std. Error\"],\n    ec50_low = ed[1, \"Lower\"],\n    ec50_up  = ed[1, \"Upper\"]\n  )\n}\n\nec50_df &lt;- summary |&gt;\n  group_by(primary_mab_name) |&gt;\n  group_modify(~ fit_one_ab(.x)) |&gt;\n  ungroup()\n\n\nEstimated effective doses\n\n       Estimate Std. Error    Lower    Upper\ne:1:50 0.134427   0.016674 0.081364 0.187490\n\n\n\nEstimated effective doses\n\n       Estimate Std. Error    Lower    Upper\ne:1:50 0.448393   0.045076 0.304942 0.591845\n\nprint(ec50_df)\n\n# A tibble: 2 × 5\n  primary_mab_name  ec50 ec50_se ec50_low ec50_up\n  &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;\n1 aBACE            0.134  0.0167   0.0814   0.187\n2 aSARS            0.448  0.0451   0.305    0.592"
+  },
+  {
+    "objectID": "blogs/elisa-curve-fitting/elisa_fit.html#the-final-plot",
+    "href": "blogs/elisa-curve-fitting/elisa_fit.html#the-final-plot",
+    "title": "ELISA curve fitting using ggplot2",
+    "section": "The final plot",
+    "text": "The final plot\nI am making this plot a bit fancy.\n\ncolors &lt;- c(\"aBACE\" = \"#00a5a6\", \"aSARS\" = \"#e03d90\")\nlight_colors &lt;- prismatic::clr_lighten(colors, 0.7)\n\nec50_label &lt;- ec50_df |&gt;\n  mutate(\n    label = paste0(\n      primary_mab_name, \": EC~50~ = \", signif(ec50, 3)\n    ),\n    x = 0.015,\n    y = c(1.3, 1.2)\n  )\n\ntheme_set(theme_bw(base_size = 20))\nggplot(\n  summary,\n  aes(\n    x = primary_mab_conc,\n    y = mean_od,\n    group = primary_mab_name,\n    color = primary_mab_name,\n    shape = primary_mab_name,\n    fill = primary_mab_name\n  )\n) +\n  geom_smooth(\n    method = drc::drm,\n    method.args = list(fct = drc::L.4()),\n    se = FALSE,\n    linewidth = 1,\n    show.legend = FALSE\n  ) +\n  geom_errorbar(\n    aes(ymin = mean_od - sd_od, ymax = mean_od + sd_od),\n    width = 0.1,\n    show.legend = FALSE\n  ) +\n  geom_point(size = 3, stroke = 1.5) +\n  geom_textbox(\n    data = ec50_label,\n    aes(x, y, label = label),\n    size = 6,\n    face = \"bold\",\n    width = 0.35,\n    box.color = NA,\n    fill = NA\n  ) +\n  scale_x_log10(labels = scales::label_log()) +\n  scale_y_continuous(\n    limits = c(0, 1.5), \n    n.breaks = 7, \n    expand = expansion(0)\n  ) +\n  scale_color_manual(name = NULL, values = colors) +\n  scale_fill_manual(name = NULL, values = light_colors) +\n  scale_shape_manual(name = NULL, values = c(21, 22)) +\n  labs(\n    x = \"Antibody (\\U03BCg/mL), Log\",\n    y = \"OD~450~ (Mean \\U00B1 SE)\",\n    title = \"&lt;span style='color:#00a5a6'&gt;anti-BACE&lt;/span&gt; is more potent compared to&lt;span style='color:#e03d90'&gt; anti-SARS&lt;/span&gt; antibody\"\n  ) +\n  theme(\n    legend.position = \"none\",\n    plot.title = element_markdown(size = 20),\n    axis.title.y = element_markdown(),\n    panel.grid = element_blank()\n  )"
+  },
+  {
+    "objectID": "experience.html",
+    "href": "experience.html",
+    "title": "Experience",
+    "section": "",
+    "text": "Professional Summary\n\n10+ years of experience in experiment design and assay development\nExperience antibody and soluble protein developability, production, purification & QC\nExperience in CRISPR-based gene editing in mammalian cell lines (KO and KI)\nDevelopment and selection of stable clonal cell lines using PiggyBac system\nExperience in hybridoma, yeast display screen, and 8-color flow cytometry\nAKTA based purification and optimization of proteins using affinity columns\nExperience with antibody target validation and affinity maturation\nCharacterize protein interaction and kinetics using ELISA, SPR, and BLI\nProficient in data analysis, statistical tests, visualization, and presentation in R/ Python\nEstablishing new and reviewing SOPs and laboratory protocols\nEffective communication, organizational skills, record keeping\nAbility to learn quickly, work independently, and train colleagues\n\n\n\nSenior Research Scientist, MassBiologics\n\n2020 - Present\n\nProject manager and lead in developing novel antibodies and proteins for non-human primate (NHP) preclinical studies\nOptimization of bispecific, multispecific, and alternative antibody formats\nMulticolor flow cytometry and panel generation for primate blood\nGeneration of high producing stable clonal cell lines for antibodies and protein production\nImprove antibody yield and function by gene editing\nCharacterizing protein-protein interaction using ELISA and kinetics using SPR and BLI\nEstablishing new and reviewing SOPs and laboratory protocols\nTraining colleagues & research associates\n\n\n\n\nScientist II, Totient Inc.\n\n2018 - 2020\n\nServed as cell and molecular biology lead for oncology drug discovery programs\nDeveloped strategies to simultaneously knockout two genes using CRISPR-Cas9\nExperience with preparation of high-quality whole genome lentiviral sgRNA particles\nIdentification of targets using CRISPR mediated whole genome knockout screen on multiple cell lines\nIdentification of targets for recombinant antibodies using Protein arrays, ELISA and immunofluorescence\nWorked with CROs with for special assays including 3D cell culture and SPR (Biacore)\nManaged one direct report\n\n\n\n\nPostdoctoral Associate, University of Massachusetts Medical School\n\n2018\n\nDeveloping a CRISPR screen to identify novel epigenetic regulators in Ewing’s Sarcoma\nExecuting genome wide shRNA/ RNAi and proteomic screens to identify regulators in X-chromosome inactivation pathway\nGenome editing by CRISPR/Cas9 for specific projects in the lab\nManaged one intern and two junior graduate students"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Shubham Dutta",
+    "section": "",
+    "text": "tidyplate: Transform Microplate Data into Tidy Dataframes\n\n\n\n\n\n\n\n\nOct 26, 2024\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nEmerging Trends in Immunotherapy for Cancer\n\n\n\n\n\n\n\n\nSep 6, 2022\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nFrontiers of CRISPR-Cas9 for Cancer Research and Therapy\n\n\n\n\n\n\n\n\nApr 28, 2021\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nTRIP6 inhibits Hippo signaling in response to tension at adherens junctions\n\n\n\n\n\n\n\n\nFeb 1, 2018\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nAngiomotins link F-actin architecture to Hippo pathway signaling\n\n\n\n\n\n\n\n\nMar 19, 2014\n\n\nShubham Dutta\n\n\n\n\n\n\n\n\n\n\n\n\nTranslocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against NSAIDs\n\n\n\n\n\n\n\n\nNov 1, 2011\n\n\nShubham Dutta\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
+    "section": "",
+    "text": "Shubham Dutta, Priscilla Ramos Costa, Anamika Banerjee, Diogo Magnani, Kathleen Engelman (2024). Phenotypic Analysis of T-cells population in Common Marmosets (manuscript under preparation)\nShubham Dutta (2024). tidyplate: Transform Microplate Data into Tidy Dataframes. R package version 1.0.0. URL: tidyplate\nKathleen Engelman and Shubham Dutta, Callithrix jacchus immunoglobulin heavy chain constant region mRNA, partial cds. Nucleotide. Bethesda (MD): National Library of Medicine (US), National Center for Biotechnology Information; (2023) – Accession No. OQ632781.1\nKathleen Engelman and Shubham Dutta, Saimiri boliviensis immunoglobulin heavy chain constant region mRNA, partial cds. Nucleotide. Bethesda (MD): National Library of Medicine (US), National Center for Biotechnology Information; (2023) – Accession No. OQ632782.1\nKathleen Engelman and Shubham Dutta, Callithrix jacchus immunoglobulin light chain constant region mRNA, partial cds. Nucleotide. Bethesda (MD): National Library of Medicine (US), National Center for Biotechnology Information; (2023) – Accession No. OQ632783.1\nKathleen Engelman and Shubham Dutta, Saimiri boliviensis immunoglobulin light chain constant region mRNA, partial cds. Nucleotide. Bethesda (MD): National Library of Medicine (US), National Center for Biotechnology Information; (2023) – Accession No. OQ632784.1\nAlok K Mishra, Amjad Ali, Shubham Dutta, Shahid Banday, Sunil K Malonia (2022). Emerging Trends in Immunotherapy for Cancer. Diseases, DOI: 10.3390/diseases10030060\nAnamika Banerjee, Sunil Kumar Malonia, Shubham Dutta* (2021). Frontiers of CRISPR-Cas9 for cancer research and therapy. Journal of Exploratory Research in Pharmacology, DOI: 10.14218/JERP.2020.00033 *co-corresponding author\nShubham Dutta, Sebastian Mana‐Capelli, Murugan Paramasivam, Ishani Dasgupta, Heather Cirka, Kris Billiar, Dannel McCollum (2018). TRIP6 inhibits Hippo signaling in response to tension at adherens junctions. EMBO Reports, DOI: 10.15252/embr.201744777\nSebastian Mana-Capelli, Murugan Paramasivam, Shubham Dutta, Dannel McCollum (2014). Angiomotins link F-actin architecture to Hippo pathway signaling. Molecular biology of the cell, DOI: 10.1091/mbc.E13-11-0701\nSamik Bindu, Chinmay Pal, Sumanta Dey, Manish Goyal, Athar Alam, Mohd Shameel Iqbal, Shubham Dutta, Souvik Sarkar, Rahul Kumar, Pallab Maity, Uday Bandyopadhyay (2011). Translocation of heme oxygenase-1 to mitochondria is a novel cytoprotective mechanism against non-steroidal anti-inflammatory drug-induced mitochondrial oxidative stress, apoptosis, and gastric mucosal injury. Journal of Biological Chemistry. DOI: 10.1074/jbc.M111.279893"
+  }
+]
