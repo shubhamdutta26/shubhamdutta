@@ -21,21 +21,21 @@ about:
       href: mailto:shubhamdutta26@gmail.com
 ---
 
-I am the Senior Research Scientist at the Massbiologics working on antibody development for pre-clinical studies in non-human primates.
+I am a Senior Research Scientist at the Massbiologics (UMass Medical School) working on antibody development for pre-clinical studies in non-human primates.
 
 This is my personal site, where I share notes on data analysis, visualization, and other random stuff.
 
 ### Experience
 
-**Massbiologics** \
--  Senior Research Scientist (January 2024 - present)\
--  Scientist II (September 2020 - January 2024)
+**Massbiologics**\
+- Senior Research Scientist (January 2024 - present)\
+- Scientist II (September 2020 - January 2024)
 
-**Totient Inc.** \
--  Scientist II (September 2018 - January 2020)
+**Totient Inc.**\
+- Scientist II (September 2018 - January 2020)
 
-**UMass Medical School** \
--  Postdoctoral associate (May 2018 - August 2018)
+**UMass Medical School**\
+- Postdoctoral associate (May 2018 - August 2018)
 
 ### Education
 
