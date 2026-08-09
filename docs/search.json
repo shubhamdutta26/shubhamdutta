@@ -56,46 +56,11 @@
     "text": "The final plot\n\nggplot(NULL) +\n  geom_line(\n    data = raw,\n    aes(x = time, y = values, group = conc)\n  ) +\n  geom_line(\n    data = fitted,\n    aes(x = time, y = values, group = conc),\n    color = \"red\"\n  ) +\n  scale_x_continuous(\n    expand = c(0, 0), \n    limits = c(NA, 600),\n    n.breaks = 14, \n    labels = scales::label_number(suffix = \"s\")\n  ) +\n  scale_y_continuous(\n    expand = c(0, 0),\n    limits = c(-2, 15)\n  ) +\n  theme_linedraw(base_size = 20) +\n  labs(\n    caption = \"Note: Red line is fitted data\",\n    color = \"Soluble CD16\",\n    x = \"Time (seconds)\",\n    y = \"Response units (RU)\"\n  ) +\n  theme(\n    legend.position = \"none\",\n    axis.title.x  = element_text(size = 13, face = \"bold\"),\n    axis.title.y  = element_text(size = 13, face = \"bold\"),\n    panel.grid.major = element_blank(),\n    panel.grid.minor = element_blank()\n  )"
   },
   {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html",
-    "title": "Formating axes and labels in ggplot2",
+    "objectID": "blogs/pymol-setup/pymol.html",
+    "href": "blogs/pymol-setup/pymol.html",
+    "title": "Setting up Pymol for visualizations",
     "section": "",
-    "text": "Here are some examples of how to format axes and labels in ggplot2."
-  },
-  {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
-    "title": "Formating axes and labels in ggplot2",
-    "section": "",
-    "text": "Here are some examples of how to format axes and labels in ggplot2."
-  },
-  {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
-    "title": "Formating axes and labels in ggplot2",
-    "section": "Preparing the data",
-    "text": "Preparing the data\nLoad required libraries:\n\nlibrary(dplyr)\nlibrary(ggplot2)\ntheme_set(theme_linedraw(base_size = 15))\n\nGenerate cell viability and viable cell density data:\n\ncell_viability &lt;- data.frame(\n  day = rep(1:4, 2),\n  viability = c(0.89, 0.88, 0.77, 0.66, 0.55, 0.45, 0.35, 0.25),\n  vcd = c(7, 9, 12, 15, 3, 4, 7, 8),\n  has_puromycin = c(rep(\"no\", 4), rep(\"yes\", 4))\n)\ncell_viability$day &lt;- factor(cell_viability$day)"
-  },
-  {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
-    "title": "Formating axes and labels in ggplot2",
-    "section": "Percent sign (%) and breaks",
-    "text": "Percent sign (%) and breaks\nThe variable viability is stored as a fraction, so scales::label_percent() converts the y-axis tick labels to percentages without changing the underlying data.\n\nggplot(\n  cell_viability, \n  aes(day, viability, fill = has_puromycin)\n) +\n  geom_col(position = position_dodge(width = 0.9)) +\n  geom_text(\n    aes(label = paste(viability, \"%\")),\n    vjust = -1,\n    position = position_dodge(width = 0.9)\n  ) +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viability\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 1.001), \n    n.breaks = 10, \n    labels = scales::label_percent(), \n    expand = expansion(0)\n  )"
-  },
-  {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
-    "title": "Formating axes and labels in ggplot2",
-    "section": "Custom labels using ggtext or plotmath",
-    "text": "Custom labels using ggtext or plotmath\nAxis titles sometimes need symbols or formatting that plain text can’t produce, like superscripts, Greek letters, or mathematical expressions. Two common ways to handle this: ggtext, which renders markdown/HTML in plot text, or base R’s plotmath, which renders math expressions.\n\nUsing ggtext\nUnicode characters cover most special symbols directly and ggplot2 takes care of the rendering. element_markdown() from ggtext can be used to display native markdown text.\nSome unicode codes I use a lot are mu (U00B5 or U03BC), degree (U00B0), plus-minus (U00B1), and multiply (U00D7).\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n  )\n\n\n\n\n\n\n\n\n\n\nUsing plotmath\nWe can alternatively use the plotmath package to render mathematical annotations. expression() builds a plotmath expression instead of a string, so %*% renders as a multiplication sign and 10^6 renders as a real superscript. More details on expression formating can be found here.\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = expression(\"Viable cell density\" %*% 10^6),\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    # axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank()\n  )"
-  },
-  {
-    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
-    "href": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
-    "title": "Formating axes and labels in ggplot2",
-    "section": "Chemical formulae",
-    "text": "Chemical formulae\nThe same ggtext markup can be used to display chemical formulae as well.\nNote: The puromycin formula is gibberish. This is for demonstration only.\n\ncell_viability$has_puromycin &lt;- factor(\n  cell_viability$has_puromycin,\n  levels = c(\"no\", \"yes\"),\n  labels = c(\n    \"**No** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\",\n    \"**0.25 M** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\"\n  )\n)\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  facet_grid(~has_puromycin) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n    legend.text = ggtext::element_markdown(),\n    strip.background = element_rect(fill = \"gray90\"),\n    strip.text.x = ggtext::element_markdown(color = \"black\"),\n    strip.text.y = ggtext::element_markdown(color = \"black\"),\n    legend.position = \"bottom\"\n  )"
+    "text": "This is how I setup Pymol before visualization.\n\nOpen Pymol and load the pdb file.\nSet background color to white: Display &gt; Background &gt; White\nTo hide double bonds: Display &gt; Uncheck Show Valences\nTo display the molecule in maximum quality: Display &gt; Quality &gt; Maximum Quality\nTo only show the side chain of a residue: set cartoon_side_chain_helper, 1 or set cartoon_side_chain_helper, on"
   },
   {
     "objectID": "index.html",
@@ -238,53 +203,88 @@
     "text": "Reference\nBanerjee A, Malonia SK, Dutta S. Frontiers of CRISPR-Cas9 for Cancer Research and Therapy. J Explor Res Pharmacol. 2021;6(3):96-104. doi: 10.14218/JERP.2020.00033."
   },
   {
-    "objectID": "blogs/pymol-setup/pymol.html",
-    "href": "blogs/pymol-setup/pymol.html",
-    "title": "Setting up Pymol for visualizations",
-    "section": "",
-    "text": "This is how I setup Pymol before visualization.\n\nOpen Pymol and load the pdb file.\nSet background color to white: Display &gt; Background &gt; White\nTo hide double bonds: Display &gt; Uncheck Show Valences\nTo display the molecule in maximum quality: Display &gt; Quality &gt; Maximum Quality\nTo only show the side chain of a residue: set cartoon_side_chain_helper, 1 or set cartoon_side_chain_helper, on"
-  },
-  {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html",
     "title": "Splines in ggplot2",
     "section": "",
     "text": "When visualizing trend data, standard line plots can sometimes look a bit too jagged. If you want to create a smoother, more aesthetically pleasing curve through your data points, splines are a great solution.\nIn this post, we’ll look at how to easily replace simple line plots with X-splines in ggplot2 using the geom_xspline() function from the ggfun package."
   },
   {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html#the-jagged-baseline",
     "title": "Splines in ggplot2",
     "section": "The Jagged Baseline",
     "text": "The Jagged Baseline\nFirst, let’s look at the default behavior. We’ll set up a simple dataset with two groups and plot it using the standard geom_line(). Notice how the lines connect point-to-point with sharp angles.\n\nlibrary(ggplot2)\n\ndf &lt;- data.frame(\n  group = rep(LETTERS[1:2], each = 10),\n  x = rep(1:10, 2),\n  y = c(2, 5, 9, 15, 19, 19, 15, 9, 5, 2, \n        1, 0, 3, 2, 3, 4, 14, 24, 24, 25) * 0.01\n)\n\nplot &lt;- ggplot(\n  df, \n  aes(x, y, group=group, color=factor(group))\n) +\n  geom_point(aes(color = group)) +\n  geom_text(\n    aes(label=y),\n    hjust=1, \n    vjust=-1,\n    show.legend = FALSE\n  ) +\n  scale_y_continuous(\n    limits = c(0, 0.35),\n    labels = scales::percent\n  ) +\n  scale_x_continuous(\n    breaks = 1:10,\n    minor_breaks = NULL\n  ) +\n  theme_bw()\n\nplot + geom_line()"
   },
   {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html#adding-a-subtle-curve",
     "title": "Splines in ggplot2",
     "section": "Adding a Subtle Curve",
     "text": "Adding a Subtle Curve\nTo smooth things out, we replace geom_line() with ggfun::geom_xspline(). The most important argument here is shape.\nWhen shape is negative, the curve is forced to pass exactly through the data points (interpolation). A value close to zero (like -0.1) gives a very subtle rounding to the corners.\n\nplot + ggfun::geom_xspline(shape = -0.1)"
   },
   {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html#a-much-smoother-curve",
     "title": "Splines in ggplot2",
     "section": "A Much Smoother Curve",
     "text": "A Much Smoother Curve\nIf we decrease the shape value further to -0.5, the spline bows out more between the points.\n\nplot + ggfun::geom_xspline(shape = -0.5)"
   },
   {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#approximating-the-points",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#approximating-the-points",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html#approximating-the-points",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html#approximating-the-points",
     "title": "Splines in ggplot2",
     "section": "Approximating the Points",
     "text": "Approximating the Points\nWhen shape is greater than 0, the line acts as an approximation.\n\nplot + ggfun::geom_xspline(shape = 0.5)"
   },
   {
-    "objectID": "blogs/ splines-ggplot2/splines_ggplot2.html#summary",
-    "href": "blogs/ splines-ggplot2/splines_ggplot2.html#summary",
+    "objectID": "blogs/splines-ggplot2/splines_ggplot2.html#summary",
+    "href": "blogs/splines-ggplot2/splines_ggplot2.html#summary",
     "title": "Splines in ggplot2",
     "section": "Summary",
     "text": "Summary\n\nUse geom_line() for strict point-to-point connections.\nUse geom_xspline(shape = -0.5) (or similar negative values) for a smooth curve that still honors your exact data values.\nUse geom_xspline(shape = 0.5) (or positive values) when you want to show a generalized, smoothed trend that approximations the data path."
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "",
+    "text": "Here are some examples of how to format axes and labels in ggplot2."
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#introduction",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "",
+    "text": "Here are some examples of how to format axes and labels in ggplot2."
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#preparing-the-data",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Preparing the data",
+    "text": "Preparing the data\nLoad required libraries:\n\nlibrary(dplyr)\nlibrary(ggplot2)\ntheme_set(theme_linedraw(base_size = 15))\n\nGenerate cell viability and viable cell density data:\n\ncell_viability &lt;- data.frame(\n  day = rep(1:4, 2),\n  viability = c(0.89, 0.88, 0.77, 0.66, 0.55, 0.45, 0.35, 0.25),\n  vcd = c(7, 9, 12, 15, 3, 4, 7, 8),\n  has_puromycin = c(rep(\"no\", 4), rep(\"yes\", 4))\n)\ncell_viability$day &lt;- factor(cell_viability$day)"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#percent-sign-and-breaks",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Percent sign (%) and breaks",
+    "text": "Percent sign (%) and breaks\nThe variable viability is stored as a fraction, so scales::label_percent() converts the y-axis tick labels to percentages without changing the underlying data.\n\nggplot(\n  cell_viability, \n  aes(day, viability, fill = has_puromycin)\n) +\n  geom_col(position = position_dodge(width = 0.9)) +\n  geom_text(\n    aes(label = paste(viability, \"%\")),\n    vjust = -1,\n    position = position_dodge(width = 0.9)\n  ) +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viability\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 1.001), \n    n.breaks = 10, \n    labels = scales::label_percent(), \n    expand = expansion(0)\n  )"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#custom-labels-using-ggtext-or-plotmath",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Custom labels using ggtext or plotmath",
+    "text": "Custom labels using ggtext or plotmath\nAxis titles sometimes need symbols or formatting that plain text can’t produce, like superscripts, Greek letters, or mathematical expressions. Two common ways to handle this: ggtext, which renders markdown/HTML in plot text, or base R’s plotmath, which renders math expressions.\n\nUsing ggtext\nUnicode characters cover most special symbols directly and ggplot2 takes care of the rendering. element_markdown() from ggtext can be used to display native markdown text.\nSome unicode codes I use a lot are mu (U00B5 or U03BC), degree (U00B0), plus-minus (U00B1), and multiply (U00D7).\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n  )\n\n\n\n\n\n\n\n\n\n\nUsing plotmath\nWe can alternatively use the plotmath package to render mathematical annotations. expression() builds a plotmath expression instead of a string, so %*% renders as a multiplication sign and 10^6 renders as a real superscript. More details on expression formating can be found here.\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = expression(\"Viable cell density\" %*% 10^6),\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    # axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank()\n  )"
+  },
+  {
+    "objectID": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
+    "href": "blogs/ggplot2-examples/ggplot_eg.html#chemical-formulae",
+    "title": "Formating axes and labels in ggplot2",
+    "section": "Chemical formulae",
+    "text": "Chemical formulae\nThe same ggtext markup can be used to display chemical formulae as well.\nNote: The puromycin formula is gibberish. This is for demonstration only.\n\ncell_viability$has_puromycin &lt;- factor(\n  cell_viability$has_puromycin,\n  levels = c(\"no\", \"yes\"),\n  labels = c(\n    \"**No** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\",\n    \"**0.25 M** (NH&lt;sup&gt;+4&lt;/sup&gt;)&lt;sub&gt;2&lt;/sub&gt;SO&lt;sub&gt;4&lt;/sub&gt;\"\n  )\n)\n\nggplot(\n  cell_viability, \n  aes(day, vcd, fill = has_puromycin)\n) +\n  geom_col(position = \"dodge\") +\n  labs(\n    x = \"Time (days)\",\n    y = \"Viable cell density \\U00D7 10^6^\",\n    fill = \"Puromycin\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, 20.001), \n    n.breaks = 10, \n    labels = scales::label_number(suffix = \" \\U00D7 10^6^\"), \n    expand = expansion(0)\n  ) +\n  facet_grid(~has_puromycin) +\n  theme(\n    axis.text.y = ggtext::element_markdown(),\n    axis.title.y = ggtext::element_markdown(),\n    panel.grid.major.x = element_blank(),\n    panel.grid.minor = element_blank(),\n    legend.text = ggtext::element_markdown(),\n    strip.background = element_rect(fill = \"gray90\"),\n    strip.text.x = ggtext::element_markdown(color = \"black\"),\n    strip.text.y = ggtext::element_markdown(color = \"black\"),\n    legend.position = \"bottom\"\n  )"
   },
   {
     "objectID": "blogs/elisa-curve-fitting/elisa_fit.html",
